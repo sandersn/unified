@@ -8,6 +8,22 @@ import test from 'node:test'
 import {unified} from 'unified'
 import {simpleCompiler, simpleParser} from './util/simple.js'
 
+// `this` in JS is buggy in TS.
+/**
+ * @type {Plugin<[], string, Node>}
+ */
+const parse = function () {
+  this.parser = simpleParser
+}
+
+// `this` in JS is buggy in TS.
+/**
+ * @type {Plugin<[], Node, string>}
+ */
+const compile = function () {
+  this.compiler = simpleCompiler
+}
+
 test('`freeze`', async function (t) {
   const frozen = unified().use(parse).use(compile).freeze()
 
@@ -219,19 +235,3 @@ test('`freeze`', async function (t) {
     })
   })
 })
-
-// `this` in JS is buggy in TS.
-/**
- * @type {Plugin<[], string, Node>}
- */
-function parse() {
-  this.parser = simpleParser
-}
-
-// `this` in JS is buggy in TS.
-/**
- * @type {Plugin<[], Node, string>}
- */
-function compile() {
-  this.compiler = simpleCompiler
-}
