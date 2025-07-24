@@ -8,23 +8,6 @@ import test from 'node:test'
 import {unified} from 'unified'
 import {simpleCompiler, simpleParser} from './util/simple.js'
 
-
-// `this` in JS is buggy in TS.
-/**
- * @type {Plugin<[], string, Node>}
- */
-const parse = function () {
-  this.parser = simpleParser
-}
-
-// `this` in JS is buggy in TS.
-/**
- * @type {Plugin<[], Node, string>}
- */
-const compile = function () {
-  this.compiler = simpleCompiler
-}
-
 test('`processSync`', async function (t) {
   await t.test('should throw w/o `parser`', async function () {
     assert.throws(function () {
@@ -80,3 +63,19 @@ test('`processSync`', async function (t) {
     }
   )
 })
+
+// `this` in JS is buggy in TS.
+/**
+ * @type {Plugin<[], string, Node>}
+ */
+function parse() {
+  this.parser = simpleParser
+}
+
+// `this` in JS is buggy in TS.
+/**
+ * @type {Plugin<[], Node, string>}
+ */
+function compile() {
+  this.compiler = simpleCompiler
+}
